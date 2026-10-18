@@ -1,0 +1,38 @@
+# Render FREE plan: one web service. Flask serves the API and the prebuilt React app (frontend/dist is committed).
+# Free instances sleep after ~15 min idle and have no persistent disk, so set DATABASE_URL to a free external Postgres
+# (Neon or Supabase) to keep data. Without it, data lives in a temporary SQLite file and is lost on restart.
+services:
+  - type: web
+    name: bizcuits
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && gunicorn app:app --workers 1 --threads 4 --timeout 120 --bind 0.0.0.0:$PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: GEMMA_BACKEND
+        value: gemini
+      - key: GEMMA_MODEL
+        value: gemma-3-27b-it
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: APP_URL
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: MAIL_FROM
+        value: Bizcuits <onboarding@resend.dev>
+      - key: CRON_SECRET
+        generateValue: true
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PRICE_ID
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false

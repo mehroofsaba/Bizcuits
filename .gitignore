@@ -1,0 +1,8 @@
+node_modules/
+__pycache__/
+*.db
+.env
+.pytest_cache/
+
+# Generated frontend build
+frontend/dist/
