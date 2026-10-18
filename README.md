@@ -2,62 +2,374 @@
 
 *A little something for every business thing.*
 
-An AI-assisted workspace for small sellers: product copy, menus, content calendar, customer replies, feedback insights, sales analytics and tasks. React + Vite frontend, Flask backend, Pandas for calculations, Gemma for language tasks.
+Bizcuits is an AI-assisted business workspace designed for small sellers, independent creators, and people running small businesses or side hustles. It brings everyday business tasks — from writing product descriptions to understanding sales data — into one organized workspace.
 
-## Run locally
-```bash
-cd backend && pip install -r requirements.txt
-cp .env.example .env              # optional: add Gemma settings
-python app.py                     # API on http://localhost:5000
+Instead of switching between multiple tools, users can manage their products, build menus, create marketing content, respond to customers, analyze feedback, track sales, and organize tasks in one place.
 
-cd frontend && npm install && npm run dev   # http://localhost:5173 (proxies /api)
-```
-Local data goes to `backend/bizcuits.db` (SQLite). Open the app and choose **Try the sample workspace**, or create an account.
+The goal is simple: make running a small business feel a little less overwhelming.
 
-## Deploy on Render (free plan)
-1. Push this repo to GitHub (keep `frontend/dist`; run `npm run build` in `frontend/` first if you changed the UI).
-2. **Database:** create a free Postgres at Neon or Supabase and copy its connection string. Render's free plan has no persistent disk, so without this your data is wiped whenever the service restarts.
-3. **AI:** get a free key from Google AI Studio. It serves hosted Gemma models (default `gemma-3-27b-it`).
-4. In Render: **New > Blueprint**, pick the repo (it reads `render.yaml`). Set `DATABASE_URL` and `GEMINI_API_KEY`. `SECRET_KEY` is generated for you.
-5. Visit `/api/health`: it should show `"database": "postgres"` and `"ai_configured": true`.
+## What Bizcuits Offers
 
-Free-plan facts: the service sleeps after about 15 minutes idle, so the first request can take around a minute; free AI tiers have rate limits (Bizcuits also caps each user at 40 AI requests per hour, set `AI_LIMIT_PER_HOUR` to change it). Free Render-hosted Postgres expires after 30 days, so use Neon or Supabase for long-term data.
+### 1. Dashboard
 
-## Runs with no paid services
-Everything works with zero keys and zero cost:
-- **No AI key:** every AI button still works using free built-in templates that only reuse the details you saved (replies use only your saved policies and say when they cannot answer). Translation is the one thing that needs a real AI connection. Add a free Google AI Studio key later to switch on Gemma; if Gemma is down, Bizcuits falls back to the templates.
-- **No email service:** password reset links are written to the server logs (Render > Logs) so the site owner can send them on. Add a free Resend key to email them automatically.
-- **No Stripe:** nobody can upgrade, so no plan limits are applied.
-- **Free posting channels:** Mastodon, Bluesky and Discord (plus Telegram) need no business approval or fees.
-- **Free extras:** calendar export (.ics), printable and shareable menus, CSV templates and exports, a full data download, installable as an app on a phone (web app manifest).
+A central workspace that brings important business information together.
 
-## Integrations (all optional; each works once its keys are set)
-Set these in Render's Environment tab. Anything left empty simply shows a clear "not set up" message in the app.
+- View an overview of your workspace and business activity.
+- Access frequently used tools and sections from one place.
+- Work with sample data to explore the application before adding your own information.
+- Navigate between products, content, customers, analytics, tasks, and integrations.
 
-| Feature | What to set | Notes |
+### 2. Product Studio
+
+Create and maintain an organized catalogue of your products or services.
+
+- Add, edit, and manage product information.
+- Store details such as product names, descriptions, prices, and other relevant information.
+- Generate AI-assisted product descriptions based on the details you provide.
+- Edit generated copy before using it anywhere.
+- Keep product information organized for use throughout your business workflow.
+
+**How it works:** Product details are stored in the application database. AI-assisted writing uses the information supplied with your request to create a draft, rather than requiring you to start from a blank page.
+
+### 3. Menu & Catalogue Builder
+
+Turn your products or services into a menu or shareable catalogue.
+
+- Organize items into a customer-friendly menu.
+- Create printable and shareable menus.
+- Publish a public menu through an optional shareable link.
+- Export or print menu information for use outside the application.
+
+Public sharing is optional. A menu is not intended to become public unless the relevant sharing feature is enabled.
+
+### 4. Content Studio
+
+Plan and create marketing content for your business.
+
+- Generate draft captions and promotional copy.
+- Organize content ideas and planned posts.
+- Maintain a content calendar.
+- Prepare content for supported publishing channels.
+- Edit drafts before sending or publishing them.
+
+**How it works:** The AI generates text based on the context you provide. The content remains editable, and supported publishing integrations require you to review and confirm the action.
+
+### 5. Customer Replies
+
+Get help drafting responses to customer questions and feedback.
+
+- Generate suggested replies to customer messages.
+- Use saved business policies and information to guide responses.
+- Keep replies consistent with the information you have provided.
+- Review and edit suggested messages before sending them.
+
+The reply assistant is designed to avoid inventing business policies or unsupported details. When the available information is insufficient, the response workflow can indicate that more information is needed.
+
+### 6. Feedback Insights
+
+Make customer feedback easier to understand.
+
+- Review feedback collected in your workspace.
+- Examine sentiment summaries and feedback patterns.
+- View sentiment counts and percentages.
+- Identify recurring themes that may deserve attention.
+
+**How it works:** Sentiment summaries and numerical calculations are produced by application code. AI may assist with language-based summaries, but it does not replace the underlying calculations.
+
+### 7. Sales Analytics
+
+Understand your business data using CSV imports and calculated metrics.
+
+- Import supported sales CSV files.
+- Analyze sales figures and relevant business metrics.
+- Calculate totals, percentages, comparisons, and summaries.
+- Export data or use CSV templates to prepare future imports.
+
+**How it works:** Pandas handles supported data processing and calculations. Numerical results come from the data and application logic, rather than being guessed by the language model.
+
+Always review imported data and calculated results before using them for business decisions.
+
+### 8. Tasks & Business Organization
+
+Keep track of work that needs to be done.
+
+- Create and manage business tasks.
+- Organize outstanding work and task status.
+- Use AI-assisted task ideas where supported.
+- Keep routine business activities in one workspace.
+
+The task manager helps organize work; AI-generated suggestions are drafts that you can change to suit your workflow.
+
+### 9. Connections & Integrations
+
+Connect Bizcuits to supported third-party platforms when you are ready.
+
+The integrations currently represented in the project include:
+
+- **Facebook Pages**
+- **Telegram**
+- **Mastodon**
+- **Bluesky**
+- **Discord**
+- **WhatsApp**
+- **Resend** for email delivery
+- **Stripe** for Bizcuits subscription billing
+
+The application also includes scheduled-post workflows, an Outbox for tracking send attempts and results, and a cron endpoint for scheduled work.
+
+Integration availability depends on the credentials, permissions, configuration, and platform requirements involved. Some services require additional app review or business verification.
+
+**Important:** These integrations have automated tests, but they have not all been verified against live third-party accounts. Configure and test each integration with your own authorized accounts before relying on it.
+
+### 10. Settings, Privacy & Data Management
+
+Bizcuits includes account and data-management features designed to give users control over their workspace.
+
+- Create an account and authenticate.
+- Keep workspace records associated with their owning user.
+- Download supported account data as JSON.
+- Delete an account and its associated application records through the account-management workflow.
+- Use optional public-menu sharing.
+- Configure account and integration settings.
+
+Passwords are hashed, authentication tokens expire after 30 days, and application queries are designed to restrict private records to their owning user.
+
+These application-level controls are not a substitute for secure deployment, careful secret management, or reviewing the security of a production installation.
+
+### 11. Additional Utilities
+
+Bizcuits also includes several useful tools for everyday workflows:
+
+- Calendar export in `.ics` format.
+- Printable and shareable menus.
+- CSV templates and exports.
+- Full account-data export.
+- An installable web-app manifest for compatible devices.
+
+These utilities help make information created in Bizcuits useful outside the application as well.
+
+---
+
+## How AI Works in Bizcuits
+
+Bizcuits uses Gemma for supported language tasks, including:
+
+- Product descriptions.
+- Marketing captions.
+- Customer replies.
+- Translations.
+- Summaries.
+- Task suggestions.
+
+The application supports a hosted Google AI Studio connection for Gemma and a configurable Ollama backend for self-hosted inference.
+
+AI-generated content is treated as a **draft, not an unquestionable answer**. Users can review and edit the result before using it.
+
+Numerical analytics — including totals, percentages, sentiment counts, and comparisons — are calculated by application code. The language model is not used as the source of truth for those figures.
+
+When hosted inference is enabled, the text required for a request is sent to the configured AI provider. With a properly configured self-hosted Ollama setup, inference can run on your own machine or server instead. The actual data flow depends on the selected configuration.
+
+## Technology Stack
+
+| Layer | Technology | Purpose |
 |---|---|---|
-| Password reset email | `RESEND_API_KEY`, `MAIL_FROM`, `APP_URL` | Render's free plan blocks SMTP, so Bizcuits uses Resend's HTTPS API (free tier). Until you verify your own domain at Resend, it can only email your own address. `SMTP_*` works on hosts that allow SMTP. |
-| Facebook Page, Telegram, Mastodon, Bluesky, Discord, WhatsApp | Nothing on the server | Each user pastes their own tokens in **Connections**; they are encrypted with a key derived from `SECRET_KEY`, so keep that value stable. |
-| Scheduled posts | `CRON_SECRET` (generated) | Render free sleeps when idle and a sleeping server cannot send. Create a free cron-job.org job that calls `https://YOUR-APP.onrender.com/api/cron/run?key=CRON_SECRET` every 5 minutes. It also keeps the service awake. |
-| Payments (Pro plan) | `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET`, `APP_URL` | Create a recurring Price in Stripe. Add a webhook to `https://YOUR-APP.onrender.com/api/billing/webhook` for `checkout.session.completed`, `customer.subscription.updated` and `customer.subscription.deleted`. |
+| Frontend | React | Interactive application interface |
+| Build tooling | Vite | Frontend development and production builds |
+| Backend | Python, Flask | API endpoints and application logic |
+| Data processing | Pandas | CSV processing and numerical analytics |
+| AI | Gemma | Language generation and assistance |
+| Local database | SQLite | Local application data storage |
+| Production database support | PostgreSQL | Persistent relational data storage |
+| Testing | pytest | Backend tests |
+| Frontend testing | Vitest | Frontend component and API-related tests |
+| Integrations | Third-party APIs | Messaging, publishing, email, and billing workflows |
 
-How sending works: nothing is ever sent automatically. Each post or WhatsApp message needs the user to press send and confirm. Scheduling is available for every posting channel (not WhatsApp); WhatsApp replies always go out immediately after confirmation. Every send is listed in the Outbox with its result. Plan limits (free vs Pro) are in `backend/billing.py`.
+## Project Structure
 
-These integrations call live third-party APIs. They are covered by automated tests with the network calls replaced, but they were not run against real Facebook, Telegram, WhatsApp, Resend or Stripe accounts here, so test each once with your own accounts. Meta and WhatsApp require app review and business verification before posting to other people's pages or messaging customers.
+```text
+Bizcuits/
+├── backend/
+│   ├── app.py
+│   ├── ai.py
+│   ├── analytics.py
+│   ├── auth.py
+│   ├── billing.py
+│   ├── channels.py
+│   ├── db.py
+│   ├── extras.py
+│   ├── fallback.py
+│   ├── mailer.py
+│   ├── seed.py
+│   ├── requirements.txt
+│   ├── .env.example
+│   └── tests/
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── pages/
+│   │   ├── App.jsx
+│   │   ├── api.js
+│   │   ├── ui.jsx
+│   │   └── styles.css
+│   ├── package.json
+│   └── vite.config.js
+├── render.yaml
+├── CONTRIBUTING.md
+├── LICENSE
+└── README.md
+```
 
-## AI honesty
-Gemma writes drafts only: descriptions, captions, replies, translations, summaries and task ideas. Every result is editable and nothing is sent or posted automatically. Totals, percentages, sentiment counts and comparisons come from ordinary code. Hosted inference sends the text of the requested item to Google's API; self-hosting through Ollama (`GEMMA_BACKEND=ollama`) keeps it on your machine. Do not describe a deployment as running Gemma locally unless it does.
+### Architecture Overview
 
-## Architecture
-- `backend/`: `db.py` (SQLite or Postgres, per-user rows), `auth.py` (accounts, signed tokens), `ai.py` (prompts + Gemma), `analytics.py` (Pandas), `seed.py` (labelled sample data), `app.py` (routes).
-- `frontend/src/`: `ui.jsx` shared components, `pages/` one file per screen, `styles.css` tokens + four themes.
-- Data separation: every table has a `user_id`; every query filters by it (tested). Public menus are opt-in via a random link.
+- `backend/app.py` defines the Flask application and API routes.
+- `backend/db.py` manages database access and supported database configurations.
+- `backend/auth.py` handles account authentication.
+- `backend/ai.py` manages AI-assisted language tasks.
+- `backend/analytics.py` contains analytics and data-processing logic.
+- `backend/billing.py` handles Bizcuits subscription-related functionality.
+- `backend/channels.py` supports external communication and publishing integrations.
+- `backend/extras.py`, `backend/fallback.py`, and `backend/mailer.py` provide additional application workflows.
+- `backend/seed.py` supports sample workspace data.
+- `frontend/src/pages/` contains the main application screens.
+- `frontend/src/ui.jsx` provides shared interface components.
+- `frontend/src/api.js` handles frontend API communication.
+- `frontend/src/styles.css` contains application styling and themes.
+- `render.yaml` defines the project's Render deployment configuration.
 
-## Data and privacy
-Each account owns its data. Settings lets users download everything as JSON or delete the account and all rows. Imported CSV rows stay until cleared. Passwords are hashed; tokens expire after 30 days.
+## Running Locally
 
-## Tests
-`cd backend && pytest` (21 tests) · `cd frontend && npm test` (15 tests)
+### Prerequisites
 
-## Not built yet
-Instagram and X posting (they need image uploads or paid API access), offline translation, WhatsApp message templates, payment tracking for your own customers' orders (billing here is for Bizcuits subscriptions), and automated tests against a live Postgres.
+- Python installed.
+- Node.js and npm installed.
+- Git installed if you plan to clone the repository.
+
+### 1. Get the project
+
+```bash
+git clone https://github.com/mehroofsaba/Bizcuits.git
+cd Bizcuits
+```
+
+### 2. Start the backend
+
+```bash
+cd backend
+pip install -r requirements.txt
+```
+
+Create a local environment file from the example:
+
+```bash
+cp .env.example .env
+```
+
+Configure the values you need in `.env`, then start Flask:
+
+```bash
+python app.py
+```
+
+The API is expected to run at `http://localhost:5000` with the default local configuration.
+
+### 3. Start the frontend
+
+Open a second terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173` in your browser.
+
+The Vite development configuration is intended to proxy `/api` requests to the local backend. If you change the backend address or port, make sure the frontend configuration matches it.
+
+### 4. Explore the workspace
+
+Open the application and select **Try the sample workspace**, or create an account.
+
+Sample data is intended to help you explore the interface. Review the application's configuration before using it with real business information.
+
+## Configuration
+
+The backend reads configuration from environment variables. Use `backend/.env.example` as the reference for the available settings.
+
+Common settings include:
+
+| Variable | Purpose |
+|---|---|
+| `SECRET_KEY` | Application signing and security configuration |
+| `DATABASE_URL` | Optional PostgreSQL connection string; local SQLite is supported |
+| `GEMMA_BACKEND` | Select the configured AI backend |
+| `GEMMA_MODEL` | Choose the language model identifier |
+| `GEMINI_API_KEY` | Authenticate hosted Google AI Studio inference |
+| `OLLAMA_URL` | Address of the configured Ollama service |
+| `AI_LIMIT_PER_HOUR` | Configure the AI request limit |
+| `RESEND_API_KEY` | Configure email delivery through Resend |
+| `MAIL_FROM` | Sender address for supported email workflows |
+| `APP_URL` | Public application URL used in relevant links and redirects |
+| `STRIPE_SECRET_KEY` | Configure Stripe billing |
+| `STRIPE_PRICE_ID` | Identify the configured subscription price |
+| `STRIPE_WEBHOOK_SECRET` | Verify supported Stripe webhook requests |
+| `CRON_SECRET` | Protect the scheduled-work endpoint |
+
+Not every variable is required for local development. Configure only the services you intend to use.
+
+**Never commit real API keys, passwords, tokens, or production secrets to the repository.** Use environment variables or the hosting provider's secret-management settings for deployed environments.
+
+## Testing
+
+### Backend
+
+```bash
+cd backend
+pytest
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm test
+```
+
+The repository includes automated tests for selected backend endpoints, additional backend workflows, frontend components, and API-related behavior.
+
+Automated tests do not guarantee that every external integration works with live credentials or that every production deployment is configured correctly.
+
+## Deployment
+
+The repository includes a `render.yaml` configuration for deployment through Render.
+
+Before deploying, review the service definitions, build and start commands, environment variables, database configuration, and frontend-to-backend API URL. Production deployments should use a persistent database, keep secrets out of source control, and configure cross-origin access and authentication appropriately.
+
+See the deployment configuration in [`render.yaml`](render.yaml) and the environment-variable reference in [`backend/.env.example`](backend/.env.example).
+
+## Known Limitations & Future Work
+
+The following features are not yet built or fully verified:
+
+- Instagram and X publishing.
+- Offline translation.
+- WhatsApp message templates.
+- Payment tracking for a business's own customer orders; the existing billing functionality concerns Bizcuits subscriptions.
+- Automated tests against a live PostgreSQL database.
+- Live end-to-end verification of all third-party integrations.
+
+Feature availability may also depend on the external platform's API access, account permissions, and review requirements.
+
+## Data & Privacy Notes
+
+Bizcuits is designed around per-user data separation, optional public sharing, and user-controlled account data management. However, security depends on the complete deployment and configuration, not only the application code.
+
+Before using Bizcuits for sensitive or real customer information, review the authentication setup, database access controls, secret management, backups, logging, third-party data processing, and applicable privacy obligations.
+
+## Contributing
+
+Contributions, bug reports, and thoughtful feature suggestions are welcome. Please review [`CONTRIBUTING.md`](CONTRIBUTING.md) before submitting changes.
+
+## License
+
+See [`LICENSE`](LICENSE) for the project's license terms.
