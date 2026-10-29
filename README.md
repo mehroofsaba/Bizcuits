@@ -8,6 +8,10 @@ Instead of switching between multiple tools, users can manage their products, bu
 
 The goal is simple: make running a small business feel a little less overwhelming.
 
+<p align="center">
+  <img src="assets/Bizcuits.png" alt="Bizcuits" width="100%">
+</p>
+
 ## What Bizcuits Offers
 
 ### 1. Dashboard
@@ -54,6 +58,10 @@ Plan and create marketing content for your business.
 
 **How it works:** The AI generates text based on the context you provide. The content remains editable, and supported publishing integrations require you to review and confirm the action.
 
+<p align="center">
+  <img src="assets/content.png" alt="content" width="100%">
+</p>
+
 ### 5. Customer Replies
 
 Get help drafting responses to customer questions and feedback.
@@ -64,6 +72,10 @@ Get help drafting responses to customer questions and feedback.
 - Review and edit suggested messages before sending them.
 
 The reply assistant is designed to avoid inventing business policies or unsupported details. When the available information is insufficient, the response workflow can indicate that more information is needed.
+
+<p align="center">
+  <img src="assets/replies.png" alt="replies" width="100%">
+</p>
 
 ### 6. Feedback Insights
 
