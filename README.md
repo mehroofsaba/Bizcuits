@@ -292,6 +292,8 @@ Open the application and select **Try the sample workspace**, or create an accou
 
 Sample data is intended to help you explore the interface. Review the application's configuration before using it with real business information.
 
+## Deployed link - https://bizcuits.onrender.com
+
 ## Configuration
 
 The backend reads configuration from environment variables. Use `backend/.env.example` as the reference for the available settings.
